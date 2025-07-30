@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ajout vocabulaire coréen</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .korean-input { font-family: 'Malgun Gothic', 'Gulim', sans-serif; }
+        .form-group { margin-bottom: 1.5rem; }
+        h1 { margin-bottom: 2rem; color: #2c3e50; }
+        .btn-primary { background-color: #3498db; border-color: #3498db; }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h1 class="text-center">Ajouter un mot coréen</h1>
+            
+            <!-- Messages flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" accept-charset="utf-8">
+                <div class="form-group">
+                    <label for="id_unit" class="form-label">Unité</label>
+                    <select id="id_unit" name="id_unit" class="form-select" required>
+                        <option value="">Sélectionnez une unité</option>
+                        {% for unit in units %}
+                        <option value="{{ unit.id_unit }}">{{ unit.unit }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_lesson" class="form-label">Leçon</label>
+                    <select id="id_lesson" name="id_lesson" class="form-select" required>
+                        <option value="">Sélectionnez une leçon</option>
+                        {% for lesson in lessons %}
+                        <option value="{{ lesson.id_lesson }}">{{ lesson.lesson }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_type" class="form-label">Type de mot</label>
+                    <select id="id_type" name="id_type" class="form-select" required>
+                        <option value="">Sélectionnez un type</option>
+                        {% for type in types %}
+                        <option value="{{ type.id_type }}">{{ type.type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="voc_coreen" class="form-label">Mot coréen</label>
+                    <input type="text" id="voc_coreen" name="voc_coreen" class="form-control korean-input" required 
+                           placeholder="한국어 단어">
+                </div>
+                
+                <div class="form-group">
+                    <label for="voc_traduction" class="form-label">Traduction</label>
+                    <input type="text" id="voc_traduction" name="voc_traduction" class="form-control" required 
+                           placeholder="Traduction française">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exemple_coreen" class="form-label">Exemple coréen (optionnel)</label>
+                    <textarea id="exemple_coreen" name="exemple_coreen" class="form-control korean-input" rows="2"
+                              placeholder="한국어 예문"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exemple_traduit" class="form-label">Exemple traduit (optionnel)</label>
+                    <textarea id="exemple_traduit" name="exemple_traduit" class="form-control" rows="2"
+                              placeholder="Traduction de l'exemple"></textarea>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
