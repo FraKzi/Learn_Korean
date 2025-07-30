@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.declarative import declarative_base
 
 db = SQLAlchemy()
 
@@ -28,3 +29,20 @@ class LBAVocabulaire(db.Model):
     exemple_coreen = db.Column(db.Text)
     exemple_traduit = db.Column(db.Text)
     date_ajout = db.Column(db.Date)
+    
+class LBAV_VOCABULAIRE(db.Model):
+    __tablename__ = 'lbav_vocabulaire'
+    
+    # Suppression de primary_key=True et de __table_args__
+    unit = db.Column(db.String(255))
+    lesson = db.Column(db.String(255))
+    type = db.Column(db.String(255))
+    voc_coreen = db.Column(db.Text)
+    voc_traduction = db.Column(db.Text)
+    exemple_coreen = db.Column(db.Text)
+    exemple_traduit = db.Column(db.Text)
+
+    # Ajout d'une clé primaire composite explicite
+    __mapper_args__ = {
+        'primary_key': [unit, lesson, voc_coreen]
+    }

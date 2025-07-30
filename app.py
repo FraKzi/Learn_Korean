@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, flash, url_for
-from models import db, LBAVocabulaire, LBAUnit, LBALesson, LBAType
+from models import db, LBAVocabulaire, LBAUnit, LBALesson, LBAType, LBAV_VOCABULAIRE
 from datetime import date
 import os
 import logging
@@ -101,10 +101,53 @@ def index():
     
     return render_template('index.html', units=units, lessons=lessons, types=types)
 
-@app.route('/liste')
-def liste():
-    vocabulaires = LBAVocabulaire.query.order_by(LBAVocabulaire.id_voc.desc()).all()
-    return render_template('liste.html', vocabulaires=vocabulaires)
+
+@app.route('/vocabulaire')
+def liste_vocabulaire():
+    try:
+        # Récupération des paramètres de filtre
+        filter_unit = request.args.get('unit')
+        filter_lesson = request.args.get('lesson')
+        filter_type = request.args.get('type')
+        
+        # Construction de la requête de base
+        query = LBAV_VOCABULAIRE.query
+        
+        # Application des filtres
+        if filter_unit and filter_unit != 'all':
+            query = query.filter(LBAV_VOCABULAIRE.unit == filter_unit)
+        if filter_lesson and filter_lesson != 'all':
+            query = query.filter(LBAV_VOCABULAIRE.lesson == filter_lesson)
+        if filter_type and filter_type != 'all':
+            query = query.filter(LBAV_VOCABULAIRE.type == filter_type)
+        
+        # Tri et exécution
+        mots = query.order_by(
+            LBAV_VOCABULAIRE.unit, 
+            LBAV_VOCABULAIRE.lesson,
+            LBAV_VOCABULAIRE.voc_coreen
+        ).all()
+        
+        # Récupération des valeurs distinctes pour les menus déroulants
+        units = db.session.query(LBAV_VOCABULAIRE.unit).distinct().order_by(LBAV_VOCABULAIRE.unit).all()
+        lessons = db.session.query(LBAV_VOCABULAIRE.lesson).distinct().order_by(LBAV_VOCABULAIRE.lesson).all()
+        types = db.session.query(LBAV_VOCABULAIRE.type).distinct().order_by(LBAV_VOCABULAIRE.type).all()
+        
+        return render_template(
+            'liste_vocabulaire.html',
+            mots=mots,
+            units=units,
+            lessons=lessons,
+            types=types,
+            current_unit=filter_unit,
+            current_lesson=filter_lesson,
+            current_type=filter_type
+        )
+        
+    except Exception as e:
+        app.logger.error(f"Erreur : {str(e)}")
+        flash("Erreur lors du chargement du vocabulaire", "error")
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     with app.app_context():

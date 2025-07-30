@@ -8,7 +8,7 @@
     <style>
         .korean-input { font-family: 'Malgun Gothic', 'Gulim', sans-serif; }
         .form-group { margin-bottom: 1.5rem; }
-        h1 { margin-bottom: 2rem; color: #2c3e50; }
+        h1 { margin-bottom: 1rem; color: #2c3e50; }
         .btn-primary { background-color: #3498db; border-color: #3498db; }
     </style>
 </head>
@@ -16,7 +16,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <h1 class="text-center">Ajouter un mot coréen</h1>
-            
+
+            <div class="mt-4">
+                <a href="{{ url_for('liste_vocabulaire') }}" class="btn btn-info">Voir tout le vocabulaire</a>
+            </div>
+
             <!-- Messages flash -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -28,7 +32,7 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            
+
             <form method="POST" accept-charset="utf-8">
                 <div class="form-group">
                     <label for="id_unit" class="form-label">Unité</label>
@@ -39,7 +43,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="id_lesson" class="form-label">Leçon</label>
                     <select id="id_lesson" name="id_lesson" class="form-select" required>
@@ -49,7 +53,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="id_type" class="form-label">Type de mot</label>
                     <select id="id_type" name="id_type" class="form-select" required>
@@ -59,31 +63,31 @@
                         {% endfor %}
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="voc_coreen" class="form-label">Mot coréen</label>
                     <input type="text" id="voc_coreen" name="voc_coreen" class="form-control korean-input" required 
                            placeholder="한국어 단어">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="voc_traduction" class="form-label">Traduction</label>
                     <input type="text" id="voc_traduction" name="voc_traduction" class="form-control" required 
                            placeholder="Traduction française">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="exemple_coreen" class="form-label">Exemple coréen (optionnel)</label>
                     <textarea id="exemple_coreen" name="exemple_coreen" class="form-control korean-input" rows="2"
                               placeholder="한국어 예문"></textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="exemple_traduit" class="form-label">Exemple traduit (optionnel)</label>
                     <textarea id="exemple_traduit" name="exemple_traduit" class="form-control" rows="2"
                               placeholder="Traduction de l'exemple"></textarea>
                 </div>
-                
+
                 <div class="d-grid gap-2 mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">Enregistrer</button>
                 </div>
